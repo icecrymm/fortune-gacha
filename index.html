@@ -980,6 +980,12 @@
 
         /* 모바일 성능 최적화 */
         @media (max-width: 768px) {
+            /* 배경 애니메이션 모바일 약화 (GPU 부하 감소) */
+            body::before {
+                animation: moveBackground 60s linear infinite;  /* 30s → 60s로 2배 느리게 */
+                opacity: 0.3;  /* 0.8 → 0.3으로 시각적 부하 감소 */
+            }
+
             /* 이모지 크기 모바일 감소 (350px) */
             .falling-emoji {
                 font-size: 350px;
@@ -1218,33 +1224,33 @@
 
                 if (fortune.title === '대길' || fortune.title === '대대길') {
                     emojis = ['🍀', '⭐', '💎', '🎉'];
-                    count = isMobile() ? 30 : 75;
+                    count = isMobile() ? 15 : 75;  // 모바일 추가 감소: 30→15
                 } else if (fortune.title === '소길' || fortune.title === '길') {
                     emojis = ['⭐', '💖', '✨', '🌟'];
-                    count = isMobile() ? 25 : 60;
+                    count = isMobile() ? 12 : 60;  // 모바일 추가 감소: 25→12
                 } else if (fortune.title === '중길') {
                     emojis = ['🔥', '💪', '⭐', '✨'];
-                    count = isMobile() ? 25 : 60;
+                    count = isMobile() ? 12 : 60;  // 모바일 추가 감소: 25→12
                 } else if (fortune.title === '평운') {
                     emojis = ['😊', '🌤️', '☁️', '😌'];
-                    count = isMobile() ? 15 : 45;
+                    count = isMobile() ? 8 : 45;   // 모바일 추가 감소: 15→8
                 } else if (fortune.title === '소흉') {
                     emojis = ['⚠️', '😰', '⚡', '💧'];
-                    count = isMobile() ? 20 : 50;
+                    count = isMobile() ? 10 : 50;  // 모바일 추가 감소: 20→10
                 } else if (fortune.title === '중흉') {
                     emojis = ['❓', '⚡', '🌪️', '💫'];
-                    count = isMobile() ? 20 : 50;
+                    count = isMobile() ? 10 : 50;  // 모바일 추가 감소: 20→10
                 } else if (fortune.title === '흉') {
                     emojis = ['😢', '⚠️', '💔', '😞'];
-                    count = isMobile() ? 20 : 50;
+                    count = isMobile() ? 10 : 50;  // 모바일 추가 감소: 20→10
                 } else if (fortune.title === '대흉') {
                     emojis = ['💀', '🔥', '⚡', '🖤'];
-                    count = isMobile() ? 15 : 40;
+                    count = isMobile() ? 8 : 40;   // 모바일 추가 감소: 15→8
                 }
 
                 // 이모지 폭발 효과 생성 - 동시다발적으로 펑!
                 for (let emojiCount = 0; emojiCount < count; emojiCount++) {
-                    const delay = isMobile() ? emojiCount * 5 : emojiCount * 2; // 모바일 5ms, 데스크톱 2ms
+                    const delay = isMobile() ? emojiCount * 30 : emojiCount * 2; // 모바일 30ms (분산), 데스크톱 2ms
                     const timeoutId = setTimeout(() => {
                         const emoji = document.createElement('div');
                         emoji.className = 'falling-emoji';
@@ -1285,6 +1291,16 @@
 
         // 모달 닫기
         function closeModal() {
+            // 진행 중인 모든 이모지 타임아웃 정리 (메모리 누수 방지)
+            window.emojiTimeouts.forEach(id => clearTimeout(id));
+            window.emojiTimeouts = [];
+
+            // 남은 이모지 요소 제거
+            document.querySelectorAll('.falling-emoji').forEach(el => {
+                el.style.animation = 'none';
+                el.remove();
+            });
+
             modalOverlay.classList.remove('show');
         }
 

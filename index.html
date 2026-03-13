@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 운세</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+            letter-spacing: 2px;
+        }
+
+        /* 가챠 머신 3D 스타일 */
+        .gacha-machine {
+            width: 280px;
+            margin: 0 auto 50px;
+            position: relative;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+        }
+
+        /* 머신 상단 */
+        .gacha-top {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(to bottom, #ffd700, #ffb300);
+            border: 8px solid #e6a700;
+            border-radius: 20px 20px 0 0;
+            border-bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .gacha-lights {
+            display: flex;
+            gap: 15px;
+            position: absolute;
+            top: -25px;
+        }
+
+        .light {
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle at 30% 30%, #ffff99, #ffff00);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffff00, inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .gacha-top span {
+            color: #cc6600;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        /* 가챠 머신 본체 */
+        .gacha-body {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(to bottom, #ffed4e 0%, #ffeb3b 50%, #ffd700 100%);
+            border: 8px solid #e6a700;
+            border-top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* 투명 윈도우 */
+        .gacha-window {
+            width: 100%;
+            height: 180px;
+            background: rgba(200, 220, 255, 0.3);
+            border: 6px solid #333;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 공들이 회전하는 영역 */
+        .balls-container {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .balls-container.spinning {
+            opacity: 1;
+        }
+
+        .ball {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), inset -1px -1px 2px rgba(255, 255, 255, 0.4);
+        }
+
+        .ball.red { background: linear-gradient(135deg, #ff6b6b, #ff4444); }
+        .ball.blue { background: linear-gradient(135deg, #4dabf7, #1971c2); }
+        .ball.purple { background: linear-gradient(135deg, #b197fc, #7950f2); }
+        .ball.green { background: linear-gradient(135deg, #51cf66, #2f9e44); }
+        .ball.orange { background: linear-gradient(135deg, #ffa94d, #ff922b); }
+        .ball.pink { background: linear-gradient(135deg, #f783ac, #f06595); }
+
+        @keyframes spin {
+            from { transform: rotate(0deg) translateX(75px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(75px) rotate(-360deg); }
+        }
+
+        .balls-container.spinning .ball {
+            animation: spin 0.3s linear infinite;
+        }
+
+        /* 결과 표시 */
+        .result-box {
+            position: absolute;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .result-box.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .result-title {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .result-lucky-item {
+            font-size: 0.85em;
+            color: #ff8787;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .result-warning {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.3;
+            padding: 0 5px;
+        }
+
+        /* 출구 */
+        .gacha-outlet {
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(to right, #e6a700, #ffb300);
+            border: 4px solid #333;
+            border-radius: 5px;
+            margin: 10px 0;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.4), -2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gacha-outlet::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 30px;
+            background: radial-gradient(ellipse, #ffff99, #ffff00);
+            left: 17px;
+            top: 5px;
+            border-radius: 3px;
+        }
+
+        /* 공이 튀어나오는 애니메이션 */
+        .result-ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            opacity: 0;
+            bottom: 50%;
+        }
+
+        .result-ball.pop {
+            animation: ballPop 0.8s ease-out forwards;
+        }
+
+        @keyframes ballPop {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0.5);
+            }
+        }
+
+        /* 버튼 영역 */
+        .gacha-button-area {
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to bottom, #ffd700, #ffb300);
+            border: 8px solid #e6a700;
+            border-top: 0;
+            border-radius: 0 0 15px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .gacha-button {
+            width: 100px;
+            height: 45px;
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #cc0000);
+            border: 4px solid #990000;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            transition: all 0.15s;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .gacha-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .gacha-button:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 -1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .gacha-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* 상세 결과 */
+        .detailed-result {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 25px;
+            margin-top: 30px;
+            max-width: 500px;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        .detail-content {
+            color: #333;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .date-display {
+            color: white;
+            margin-top: 40px;
+            font-size: 1.05em;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 모달 팝업 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 35px;
+            max-width: 450px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 35px;
+            height: 35px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #e0e0e0;
+            color: #333;
+            transform: scale(1.1);
+        }
+
+        .modal-close:active {
+            transform: scale(0.95);
+        }
+
+        .modal-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎰 오늘의 운세 🎰</h1>
+
+        <div class="gacha-machine">
+            <div class="gacha-lights">
+                <div class="light"></div>
+                <div class="light"></div>
+                <div class="light"></div>
+                <div class="light"></div>
+            </div>
+
+            <div class="gacha-top">
+                <span>✨ 운세 뽑기 ✨</span>
+            </div>
+
+            <div class="gacha-body">
+                <div class="gacha-window">
+                    <div class="balls-container" id="ballsContainer">
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball purple"></div>
+                        <div class="ball green"></div>
+                        <div class="ball orange"></div>
+                        <div class="ball pink"></div>
+                    </div>
+                    <div class="result-box" id="resultBox">
+                        <div class="result-title" id="resultTitle">-</div>
+                        <div class="result-lucky-item" id="resultLuckyItem"></div>
+                        <div class="result-warning" id="resultWarning"></div>
+                    </div>
+                    <div class="result-ball" id="resultBall"></div>
+                </div>
+
+                <div class="gacha-outlet"></div>
+            </div>
+
+            <div class="gacha-button-area">
+                <button class="gacha-button" id="gacha-btn">뽑기</button>
+            </div>
+        </div>
+
+        <div class="date-display" id="dateDisplay"></div>
+    </div>
+
+    <!-- 모달 팝업 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-title" id="modalTitle">-</div>
+
+            <div class="detail-section">
+                <div class="detail-label">📌 오늘의 운세</div>
+                <div class="detail-content" id="detailToday"></div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">⚠️ 조심할 점</div>
+                <div class="detail-content" id="detailWarning"></div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">💎 행운의 아이템</div>
+                <div class="detail-content" id="detailLuckyItem"></div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-label">📅 오늘 하루 타이밍</div>
+                <div class="detail-content" id="detailTiming"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fortuneData = [
+            {
+                title: '대길',
+                today: '오늘은 모든 일이 뜻대로 흘러가는 최고의 길일이다!',
+                warning: '자만하지 말고 감사하는 마음을 가지세요.',
+                luckyItem: '흰색 옷, 수정, 동전',
+                timing: '오전: 일 시작 · 점심: 중요한 결정 · 저녁: 경축'
+            },
+            {
+                title: '소길',
+                today: '무난하고 편안한 하루가 될 것 같다. 작은 행운들이 쌓이는 날!',
+                warning: '세심함을 잃지 마세요. 작은 실수가 누적될 수 있습니다.',
+                luckyItem: '파란색 옷, 선인장, 열쇠',
+                timing: '오전: 계획 세우기 · 점심: 휴식 · 저녁: 정리정돈'
+            },
+            {
+                title: '중길',
+                today: '노력이 결실을 맺는 날이다. 조금만 더 집중하면 성공할 거야!',
+                warning: '포기하지 말고 끝까지 밀어붙이세요.',
+                luckyItem: '빨간색 액세서리, 석류, 종이학',
+                timing: '오전: 집중력 · 점심: 충전 · 저녁: 마무리'
+            },
+            {
+                title: '평운',
+                today: '특별한 변화는 없지만 차분한 에너지의 하루다. 안정적으로 흘러갈 것 같다.',
+                warning: '변화를 두려워하지 말고 기회를 놓치지 마세요.',
+                luckyItem: '초록색 옷, 나뭇잎, 펜',
+                timing: '오전: 일상 · 점심: 대화 · 저녁: 휴식'
+            },
+            {
+                title: '소흉',
+                today: '약간의 주의가 필요한 날이다. 성급하지 말고 신중하게 행동하세요.',
+                warning: '중요한 결정은 충분히 생각한 후에 하세요.',
+                luckyItem: '검은색 옷, 흑석, 벨',
+                timing: '오전: 신중함 · 점심: 상담 · 저녁: 조용함'
+            },
+            {
+                title: '중흉',
+                today: '예상치 못한 상황이 생길 수 있는 날이다. 여유를 가지고 대처하세요.',
+                warning: '감정적인 판단을 피하세요. 이성적으로 생각하세요.',
+                luckyItem: '주황색 옷, 호박석, 향초',
+                timing: '오전: 깨어있기 · 점심: 먹기 · 저녁: 기도'
+            },
+            {
+                title: '대흉',
+                today: '조심스러운 하루가 될 것 같다. 중요한 일은 미루고 안전을 최우선으로!',
+                warning: '어떤 결정도 서두르지 마세요. 모든 것을 점검하세요.',
+                luckyItem: '금색 액세서리, 황수정, 촛불',
+                timing: '오전: 침묵 · 점심: 기도 · 저녁: 명상'
+            },
+            {
+                title: '길',
+                today: '좋은 기운이 감도는 날이다. 모든 노력이 보상받을 것 같다!',
+                warning: '겸손함을 잃지 마세요. 항상 감사를 기억하세요.',
+                luckyItem: '노란색 옷, 호박, 나침반',
+                timing: '오전: 행동 · 점심: 연결 · 저녁: 축하'
+            },
+            {
+                title: '흉',
+                today: '일이 복잡해질 수 있으니 한 발 물러서서 상황을 봐야 할 날이다.',
+                warning: '다른 사람의 조언을 귀 기울여 들으세요.',
+                luckyItem: '보라색 옷, 자수정, 진정제',
+                timing: '오전: 잠시멈춤 · 점심: 상담 · 저녁: 생각'
+            },
+            {
+                title: '대대길',
+                today: '오늘은 정말 특별한 날이다! 모든 것이 최고의 방향으로 움직인다!',
+                warning: '너무 자만하지 마세요. 항상 겸손을 유지하세요.',
+                luckyItem: '모든 밝은 색상, 다이아몬드, 별',
+                timing: '오전: 시작 · 점심: 정점 · 저녁: 축제'
+            }
+        ];
+
+        const gachaBtn = document.getElementById('gacha-btn');
+        const ballsContainer = document.getElementById('ballsContainer');
+        const resultBox = document.getElementById('resultBox');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultBall = document.getElementById('resultBall');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const dateDisplay = document.getElementById('dateDisplay');
+
+        // 오늘 날짜 표시
+        function displayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const date = String(today.getDate()).padStart(2, '0');
+            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayName = dayNames[today.getDay()];
+            dateDisplay.textContent = `${year}년 ${month}월 ${date}일 (${dayName}요일)`;
+        }
+
+        // 같은 날에는 같은 운세가 나오도록
+        function getTodayFortune() {
+            const today = new Date();
+            const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+            const hash = dateString.split('').reduce((acc, char) => {
+                return acc + char.charCodeAt(0);
+            }, 0);
+            return fortuneData[hash % fortuneData.length];
+        }
+
+        // 모달 열기
+        function openModal(fortune) {
+            modalTitle.textContent = fortune.title;
+            document.getElementById('detailToday').textContent = fortune.today;
+            document.getElementById('detailWarning').textContent = fortune.warning;
+            document.getElementById('detailLuckyItem').textContent = fortune.luckyItem;
+            document.getElementById('detailTiming').textContent = fortune.timing;
+            modalOverlay.classList.add('show');
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            modalOverlay.classList.remove('show');
+        }
+
+        gachaBtn.addEventListener('click', () => {
+            if (gachaBtn.disabled) return;
+
+            gachaBtn.disabled = true;
+            ballsContainer.classList.add('spinning');
+            resultBox.classList.remove('show');
+
+            // 공 튀어나오는 효과
+            setTimeout(() => {
+                resultBall.style.background = 'radial-gradient(135deg, #ff6b6b, #ff4444)';
+                resultBall.classList.add('pop');
+            }, 300);
+
+            // 애니메이션 종료
+            setTimeout(() => {
+                ballsContainer.classList.remove('spinning');
+                resultBall.classList.remove('pop');
+                resultBall.style.background = '';
+
+                const todayFortune = getTodayFortune();
+                resultTitle.textContent = todayFortune.title;
+                document.getElementById('resultLuckyItem').textContent = `🍀 ${todayFortune.luckyItem}`;
+                document.getElementById('resultWarning').textContent = todayFortune.warning;
+                resultBox.classList.add('show');
+
+                // 팝업 열기
+                setTimeout(() => {
+                    openModal(todayFortune);
+                }, 300);
+
+                gachaBtn.disabled = false;
+            }, 1200);
+        });
+
+        // 모달 닫기 이벤트
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        displayDate();
+    </script>
+</body>
+</html>

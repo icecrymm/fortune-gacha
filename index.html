@@ -33,24 +33,408 @@
             letter-spacing: 1px;
         }
 
-        .mascot {
-            font-size: 4em;
-            margin-bottom: 15px;
-            display: inline-block;
+        /* 일러스트 기본 */
+        .illustration {
+            width: 100px;
+            height: 120px;
+            position: relative;
+            margin: 15px auto 20px;
         }
 
-        /* 가챠 머신 - 깔끔한 카드 스타일 */
+        /* 공통 얼굴 구조 */
+        .char-head {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: #f4a692;
+            border-radius: 50%;
+            left: 10px;
+            top: 10px;
+        }
+
+        .char-hair {
+            position: absolute;
+            width: 80px;
+            height: 45px;
+            background: #2c1810;
+            border-radius: 50% 50% 0 0;
+            left: 10px;
+            top: 10px;
+        }
+
+        .char-ear {
+            position: absolute;
+            width: 18px;
+            height: 22px;
+            background: #f4a692;
+            border-radius: 50%;
+            top: 30px;
+        }
+
+        .char-ear-left { left: 2px; }
+        .char-ear-right { right: 2px; }
+
+        /* 표정 - 행운 (큰 웃음) */
+        .illustration.lucky .char-eye {
+            width: 6px;
+            height: 6px;
+            background: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 38px;
+        }
+        .illustration.lucky .char-eye-left { left: 32px; }
+        .illustration.lucky .char-eye-right { right: 32px; }
+
+        .illustration.lucky .char-eye::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 8px;
+            background: #333;
+            border-radius: 50%;
+            top: -2px;
+            left: -3px;
+            opacity: 0.3;
+        }
+
+        .illustration.lucky .char-mouth {
+            position: absolute;
+            width: 24px;
+            height: 16px;
+            border: 2px solid #d94970;
+            border-top: none;
+            border-radius: 0 0 24px 24px;
+            left: 50%;
+            top: 52px;
+            transform: translateX(-50%);
+        }
+
+        /* 표정 - 평온 (눈 감음) */
+        .illustration.peaceful .char-eye {
+            width: 2px;
+            height: 10px;
+            background: #333;
+            position: absolute;
+            top: 35px;
+            border-radius: 50%;
+        }
+        .illustration.peaceful .char-eye-left { left: 32px; }
+        .illustration.peaceful .char-eye-right { right: 32px; }
+
+        .illustration.peaceful .char-mouth {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            border: 2px solid #d94970;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            left: 50%;
+            top: 54px;
+            transform: translateX(-50%);
+        }
+
+        /* 표정 - 중립/깜짝 (O 입) */
+        .illustration.neutral .char-eye {
+            width: 7px;
+            height: 9px;
+            background: #333;
+            position: absolute;
+            top: 35px;
+            border-radius: 50%;
+        }
+        .illustration.neutral .char-eye-left { left: 32px; }
+        .illustration.neutral .char-eye-right { right: 32px; }
+
+        .illustration.neutral .char-mouth {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #d94970;
+            border-radius: 50%;
+            left: 50%;
+            top: 50px;
+            transform: translateX(-50%);
+        }
+
+        /* 표정 - 화남 */
+        .illustration.angry .char-eye {
+            width: 6px;
+            height: 6px;
+            background: #333;
+            position: absolute;
+            top: 36px;
+            border-radius: 50%;
+        }
+        .illustration.angry .char-eye-left { left: 32px; }
+        .illustration.angry .char-eye-right { right: 32px; }
+
+        .illustration.angry .char-eye::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 2px;
+            background: #333;
+            top: -3px;
+            left: -2px;
+            transform: rotate(-20deg);
+        }
+
+        .illustration.angry .char-mouth {
+            position: absolute;
+            width: 16px;
+            height: 8px;
+            border: 2px solid #d94970;
+            border-radius: 0 0 16px 16px;
+            left: 50%;
+            top: 54px;
+            transform: translateX(-50%);
+        }
+
+        /* 포즈 - 축하 (별, 팔) */
+        .illustration.celebrating::before,
+        .illustration.celebrating::after {
+            content: '⭐';
+            position: absolute;
+            font-size: 16px;
+            top: 15px;
+        }
+        .illustration.celebrating::before { left: -5px; }
+        .illustration.celebrating::after { right: -5px; }
+
+        .char-arm {
+            position: absolute;
+            width: 14px;
+            height: 50px;
+            background: #f4a692;
+            border-radius: 10px;
+            top: 70px;
+        }
+        .char-arm-left {
+            left: 0;
+            transform: rotate(-35deg);
+            transform-origin: bottom center;
+        }
+        .char-arm-right {
+            right: 0;
+            transform: rotate(35deg);
+            transform-origin: bottom center;
+        }
+
+        .illustration.celebrating .char-arm {
+            transform: rotate(-50deg);
+            transform-origin: bottom center;
+            top: 60px;
+        }
+        .illustration.celebrating .char-arm-right {
+            transform: rotate(50deg);
+            transform-origin: bottom center;
+        }
+
+        /* 포즈 - 팔 올림 (승리) */
+        .illustration.victorious .char-arm {
+            width: 16px;
+            height: 50px;
+            top: 50px;
+            transform: rotate(-60deg);
+            transform-origin: bottom center;
+        }
+        .illustration.victorious .char-arm-right {
+            transform: rotate(60deg);
+            transform-origin: bottom center;
+        }
+
+        .mascot {
+            width: 120px;
+            height: 140px;
+            margin: 0 auto 15px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        /* 마누키네코 일러스트 */
+        .maneki-neko {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 몸 */
+        .neko-body {
+            position: absolute;
+            width: 70px;
+            height: 80px;
+            background: white;
+            border: 3px solid #333;
+            border-radius: 15px 15px 8px 8px;
+            left: 25px;
+            top: 30px;
+            box-shadow: inset 0 0 0 2px #fff;
+        }
+
+        /* 머리 */
+        .neko-head {
+            position: absolute;
+            width: 60px;
+            height: 65px;
+            background: white;
+            border: 3px solid #333;
+            border-radius: 50%;
+            left: 30px;
+            top: 0;
+        }
+
+        /* 귀 */
+        .neko-ear {
+            position: absolute;
+            width: 14px;
+            height: 20px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 50% 50% 0 0;
+            top: -5px;
+        }
+
+        .neko-ear-left {
+            left: 15px;
+        }
+
+        .neko-ear-right {
+            right: 15px;
+        }
+
+        /* 귀 안쪽 빨강 */
+        .neko-ear::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            background: #ff6b9d;
+            border-radius: 50%;
+            top: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* 눈 */
+        .neko-eye {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 50%;
+            top: 20px;
+        }
+
+        .neko-eye-left {
+            left: 22px;
+        }
+
+        .neko-eye-right {
+            right: 22px;
+        }
+
+        /* 입 */
+        .neko-mouth {
+            position: absolute;
+            width: 20px;
+            height: 12px;
+            border: 2px solid #333;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            top: 38px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* 콧구멍 */
+        .neko-nose {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #333;
+            border-radius: 50%;
+            top: 34px;
+        }
+
+        .neko-nose-left {
+            left: 36px;
+        }
+
+        .neko-nose-right {
+            right: 36px;
+        }
+
+        /* 팔 - 올려진 상태 */
+        .neko-arm {
+            position: absolute;
+            width: 12px;
+            height: 45px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 10px;
+            top: 35px;
+        }
+
+        .neko-arm-left {
+            left: 10px;
+            transform: rotate(-35deg);
+            transform-origin: bottom center;
+        }
+
+        .neko-arm-right {
+            right: 10px;
+            transform: rotate(35deg);
+            transform-origin: bottom center;
+        }
+
+        /* 다리 */
+        .neko-leg {
+            position: absolute;
+            width: 12px;
+            height: 20px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 0 0 6px 6px;
+            bottom: 8px;
+        }
+
+        .neko-leg-left {
+            left: 35px;
+        }
+
+        .neko-leg-right {
+            right: 35px;
+        }
+
+        /* 동전 */
+        .neko-coin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            border: 2px solid #daa520;
+            border-radius: 50%;
+            bottom: 25px;
+            right: 5px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 가챠 머신 - 옐로우 라운드 박스 스타일 */
         .gacha-machine {
             width: 320px;
             margin: 0 auto 40px;
             position: relative;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(107, 91, 60, 0.15);
-            border: 10px solid #f5e6d3;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+            border: none;
         }
 
+        /* 머신 상단 - 숨김 */
         .gacha-top {
             display: none;
         }
@@ -63,6 +447,7 @@
             display: none;
         }
 
+        /* 가챠 머신 본체 - 라운드 박스들 */
         .gacha-body {
             width: 100%;
             height: auto;
@@ -73,23 +458,26 @@
             align-items: center;
             padding: 0;
             position: relative;
+            gap: 10px;
         }
 
+        /* 투명 윈도우 */
         .gacha-window {
-            width: 100%;
+            width: 280px;
             height: 200px;
-            background: linear-gradient(135deg, #fffbf0 0%, #fff5e6 100%);
-            border: 8px solid #e6d5c8;
-            border-radius: 15px;
+            background: linear-gradient(135deg, #fffef5 0%, #fffbf0 100%);
+            border: none;
+            border-radius: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
             overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin: 0 auto;
+            box-shadow: 0 6px 18px rgba(255, 215, 0, 0.25);
         }
 
+        /* 공들이 회전하는 영역 */
         .balls-container {
             position: absolute;
             width: 150px;
@@ -132,6 +520,7 @@
             animation: spin 0.3s linear infinite;
         }
 
+        /* 결과 표시 */
         .result-box {
             position: absolute;
             text-align: center;
@@ -146,29 +535,32 @@
         }
 
         .result-title {
-            font-size: 2.2em;
-            font-weight: bold;
+            font-size: 2.4em;
+            font-weight: 800;
             color: #d4a574;
-            margin-bottom: 8px;
+            margin-bottom: 0;
             text-shadow: none;
             letter-spacing: 1px;
         }
 
         .result-lucky-item {
-            font-size: 0.85em;
-            color: #d4a574;
-            margin-bottom: 6px;
-            font-weight: 600;
+            font-size: 0.75em;
+            color: #999;
+            margin-bottom: 0;
+            font-weight: 500;
+            display: none;
         }
 
         .result-warning {
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 8px;
+            font-size: 0.75em;
+            color: #999;
+            margin-top: 0;
             line-height: 1.3;
-            padding: 0 5px;
+            padding: 0;
+            display: none;
         }
 
+        /* 출구 */
         .gacha-outlet {
             display: none;
         }
@@ -177,6 +569,7 @@
             display: none;
         }
 
+        /* 공이 튀어나오는 애니메이션 */
         .result-ball {
             position: absolute;
             width: 40px;
@@ -201,6 +594,7 @@
             }
         }
 
+        /* 버튼 영역 */
         .gacha-button-area {
             width: 100%;
             height: auto;
@@ -213,47 +607,42 @@
             align-items: center;
             box-shadow: none;
             padding: 0;
+            margin-top: 5px;
         }
 
         .gacha-button {
-            width: 140px;
-            height: 50px;
-            background: linear-gradient(135deg, #ffd89b 0%, #ffca5a 100%);
-            border: 8px solid #e6c896;
-            border-radius: 12px;
+            width: 150px;
+            height: 55px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: none;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 600;
+            font-size: 1.15em;
+            font-weight: 700;
             color: #6b5b3c;
             text-shadow: none;
             transition: all 0.2s;
-            box-shadow: 0 6px 15px rgba(230, 200, 150, 0.4);
+            box-shadow: 0 8px 18px rgba(255, 215, 0, 0.35);
         }
 
         .gacha-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(230, 200, 150, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.45);
         }
 
         .gacha-button:active:not(:disabled) {
-            transform: translateY(0);
-            box-shadow: 0 4px 10px rgba(230, 200, 150, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(255, 215, 0, 0.35);
         }
 
         .gacha-button:disabled {
-            opacity: 0.6;
+            opacity: 0.65;
             cursor: not-allowed;
         }
 
+        /* 상세 결과 */
         .detailed-result {
-            background: white;
-            border-radius: 15px;
-            padding: 30px 25px;
-            margin-top: 30px;
-            max-width: 500px;
-            text-align: left;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.5s ease;
+            display: none;
         }
 
         @keyframes slideUp {
@@ -294,19 +683,22 @@
 
         .date-display {
             color: #6b5b3c;
-            margin-top: 30px;
-            font-size: 0.95em;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 12px 25px;
-            border-radius: 10px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            background: white;
+            padding: 12px 28px;
+            border-radius: 15px;
             display: inline-block;
-            border: 6px solid #e6d5c8;
+            border: none;
+            box-shadow: 0 4px 12px rgba(107, 91, 60, 0.12);
+            font-weight: 500;
         }
 
         .hidden {
             display: none;
         }
 
+        /* 모달 팝업 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -335,14 +727,14 @@
         }
 
         .modal-content {
-            background: white;
-            border-radius: 20px;
+            background: #ffffff;
+            border-radius: 25px;
             padding: 40px 35px;
             max-width: 450px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
             animation: slideUp 0.3s ease;
         }
@@ -388,7 +780,26 @@
 </head>
 <body>
     <div class="container">
-        <div class="mascot">🐱</div>
+        <div class="mascot">
+            <div class="maneki-neko">
+                <div class="neko-head">
+                    <div class="neko-ear neko-ear-left"></div>
+                    <div class="neko-ear neko-ear-right"></div>
+                    <div class="neko-eye neko-eye-left"></div>
+                    <div class="neko-eye neko-eye-right"></div>
+                    <div class="neko-nose neko-nose-left"></div>
+                    <div class="neko-nose neko-nose-right"></div>
+                    <div class="neko-mouth"></div>
+                </div>
+                <div class="neko-body">
+                    <div class="neko-arm neko-arm-left"></div>
+                    <div class="neko-arm neko-arm-right"></div>
+                    <div class="neko-leg neko-leg-left"></div>
+                    <div class="neko-leg neko-leg-right"></div>
+                </div>
+                <div class="neko-coin"></div>
+            </div>
+        </div>
         <h1>오늘의 운세</h1>
 
         <div class="gacha-machine">
@@ -437,21 +848,22 @@
         <div class="modal-content">
             <button class="modal-close" id="modalClose">&times;</button>
             <div class="modal-title" id="modalTitle">-</div>
+            <div id="modalIllustration" class="illustration"></div>
 
             <div class="detail-section">
-                <div class="detail-label">오늘의 운세</div>
+                <div class="detail-label">📌 오늘의 운세</div>
                 <div class="detail-content" id="detailToday"></div>
             </div>
             <div class="detail-section">
-                <div class="detail-label">조심할 점</div>
+                <div class="detail-label">⚠️ 조심할 점</div>
                 <div class="detail-content" id="detailWarning"></div>
             </div>
             <div class="detail-section">
-                <div class="detail-label">행운의 아이템</div>
+                <div class="detail-label">💎 행운의 아이템</div>
                 <div class="detail-content" id="detailLuckyItem"></div>
             </div>
             <div class="detail-section">
-                <div class="detail-label">오늘 하루 타이밍</div>
+                <div class="detail-label">📅 오늘 하루 타이밍</div>
                 <div class="detail-content" id="detailTiming"></div>
             </div>
         </div>
@@ -461,6 +873,8 @@
         const fortuneData = [
             {
                 title: '대길',
+                emoji: '✨',
+                illustration: 'images/lucky.jpeg',
                 today: '오늘은 모든 일이 뜻대로 흘러가는 최고의 길일이다!',
                 warning: '자만하지 말고 감사하는 마음을 가지세요.',
                 luckyItem: '흰색 옷, 수정, 동전',
@@ -468,6 +882,8 @@
             },
             {
                 title: '소길',
+                emoji: '🌸',
+                illustration: 'images/happy.jpeg',
                 today: '무난하고 편안한 하루가 될 것 같다. 작은 행운들이 쌓이는 날!',
                 warning: '세심함을 잃지 마세요. 작은 실수가 누적될 수 있습니다.',
                 luckyItem: '파란색 옷, 선인장, 열쇠',
@@ -475,6 +891,8 @@
             },
             {
                 title: '중길',
+                emoji: '💪',
+                illustration: 'images/motivated.jpeg',
                 today: '노력이 결실을 맺는 날이다. 조금만 더 집중하면 성공할 거야!',
                 warning: '포기하지 말고 끝까지 밀어붙이세요.',
                 luckyItem: '빨간색 액세서리, 석류, 종이학',
@@ -482,6 +900,8 @@
             },
             {
                 title: '평운',
+                emoji: '🌲',
+                illustration: 'images/neutral.jpeg',
                 today: '특별한 변화는 없지만 차분한 에너지의 하루다. 안정적으로 흘러갈 것 같다.',
                 warning: '변화를 두려워하지 말고 기회를 놓치지 마세요.',
                 luckyItem: '초록색 옷, 나뭇잎, 펜',
@@ -489,6 +909,8 @@
             },
             {
                 title: '소흉',
+                emoji: '⚠️',
+                illustration: 'images/stressed.jpeg',
                 today: '약간의 주의가 필요한 날이다. 성급하지 말고 신중하게 행동하세요.',
                 warning: '중요한 결정은 충분히 생각한 후에 하세요.',
                 luckyItem: '검은색 옷, 흑석, 벨',
@@ -496,6 +918,8 @@
             },
             {
                 title: '중흉',
+                emoji: '⛈️',
+                illustration: 'images/confused.jpeg',
                 today: '예상치 못한 상황이 생길 수 있는 날이다. 여유를 가지고 대처하세요.',
                 warning: '감정적인 판단을 피하세요. 이성적으로 생각하세요.',
                 luckyItem: '주황색 옷, 호박석, 향초',
@@ -503,6 +927,8 @@
             },
             {
                 title: '대흉',
+                emoji: '🌑',
+                illustration: 'images/exhausted.jpeg',
                 today: '조심스러운 하루가 될 것 같다. 중요한 일은 미루고 안전을 최우선으로!',
                 warning: '어떤 결정도 서두르지 마세요. 모든 것을 점검하세요.',
                 luckyItem: '금색 액세서리, 황수정, 촛불',
@@ -510,6 +936,8 @@
             },
             {
                 title: '길',
+                emoji: '🌈',
+                illustration: 'images/happy.jpeg',
                 today: '좋은 기운이 감도는 날이다. 모든 노력이 보상받을 것 같다!',
                 warning: '겸손함을 잃지 마세요. 항상 감사를 기억하세요.',
                 luckyItem: '노란색 옷, 호박, 나침반',
@@ -517,6 +945,8 @@
             },
             {
                 title: '흉',
+                emoji: '🌪️',
+                illustration: 'images/frustrated.jpeg',
                 today: '일이 복잡해질 수 있으니 한 발 물러서서 상황을 봐야 할 날이다.',
                 warning: '다른 사람의 조언을 귀 기울여 들으세요.',
                 luckyItem: '보라색 옷, 자수정, 진정제',
@@ -524,6 +954,8 @@
             },
             {
                 title: '대대길',
+                emoji: '🎆',
+                illustration: 'images/lucky.jpeg',
                 today: '오늘은 정말 특별한 날이다! 모든 것이 최고의 방향으로 움직인다!',
                 warning: '너무 자만하지 마세요. 항상 겸손을 유지하세요.',
                 luckyItem: '모든 밝은 색상, 다이아몬드, 별',
@@ -541,6 +973,7 @@
         const modalTitle = document.getElementById('modalTitle');
         const dateDisplay = document.getElementById('dateDisplay');
 
+        // 오늘 날짜 표시
         function displayDate() {
             const today = new Date();
             const year = today.getFullYear();
@@ -551,12 +984,20 @@
             dateDisplay.textContent = `${year}년 ${month}월 ${date}일 (${dayName}요일)`;
         }
 
+        // 매번 랜덤 운세
         function getRandomFortune() {
             return fortuneData[Math.floor(Math.random() * fortuneData.length)];
         }
 
+        // 모달 열기
         function openModal(fortune) {
             modalTitle.textContent = fortune.title;
+
+            // 일러스트 렌더링 (이미지)
+            const illustrationEl = document.getElementById('modalIllustration');
+            illustrationEl.className = 'illustration';
+            illustrationEl.innerHTML = `<img src="${fortune.illustration}" style="width: 120px; height: 140px; border-radius: 15px; object-fit: cover;">`;
+
             document.getElementById('detailToday').textContent = fortune.today;
             document.getElementById('detailWarning').textContent = fortune.warning;
             document.getElementById('detailLuckyItem').textContent = fortune.luckyItem;
@@ -564,6 +1005,7 @@
             modalOverlay.classList.add('show');
         }
 
+        // 모달 닫기
         function closeModal() {
             modalOverlay.classList.remove('show');
         }
@@ -575,11 +1017,13 @@
             ballsContainer.classList.add('spinning');
             resultBox.classList.remove('show');
 
+            // 공 튀어나오는 효과
             setTimeout(() => {
                 resultBall.style.background = 'radial-gradient(135deg, #ff6b6b, #ff4444)';
                 resultBall.classList.add('pop');
             }, 300);
 
+            // 애니메이션 종료
             setTimeout(() => {
                 ballsContainer.classList.remove('spinning');
                 resultBall.classList.remove('pop');
@@ -591,6 +1035,7 @@
                 document.getElementById('resultWarning').textContent = randomFortune.warning;
                 resultBox.classList.add('show');
 
+                // 팝업 열기
                 setTimeout(() => {
                     openModal(randomFortune);
                 }, 300);
@@ -599,6 +1044,7 @@
             }, 1200);
         });
 
+        // 모달 닫기 이벤트
         modalClose.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {

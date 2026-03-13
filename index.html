@@ -13,12 +13,40 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fff5d9 0%, #ffe8b3 100%);
+            background: #ffffff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url('images/fish.jpeg');
+            background-size: 150px 150px;
+            background-repeat: repeat;
+            transform: rotate(45deg);
+            animation: moveBackground 30s linear infinite;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -150px -150px;
+            }
         }
 
         .container {
@@ -38,7 +66,7 @@
             width: 100px;
             height: 120px;
             position: relative;
-            margin: 15px auto 20px;
+            margin: 15px auto 45px;
         }
 
         /* 공통 얼굴 구조 */
@@ -245,13 +273,14 @@
         }
 
         .mascot {
-            width: 120px;
-            height: 140px;
-            margin: 0 auto 15px;
+            width: 200px;
+            height: 220px;
+            margin: 0 auto 30px;
             position: relative;
             display: flex;
             align-items: flex-end;
             justify-content: center;
+            cursor: pointer;
         }
 
         /* 마누키네코 일러스트 */
@@ -259,6 +288,12 @@
             position: relative;
             width: 100%;
             height: 100%;
+        }
+
+        .maneki-neko img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         /* 몸 */
@@ -458,15 +493,15 @@
             align-items: center;
             padding: 0;
             position: relative;
-            gap: 10px;
+            gap: 20px;
         }
 
         /* 투명 윈도우 */
         .gacha-window {
             width: 280px;
             height: 200px;
-            background: linear-gradient(135deg, #fffef5 0%, #fffbf0 100%);
-            border: none;
+            background: linear-gradient(135deg, #fff9e6 0%, #ffe8cc 100%);
+            border: 4px solid #d4a574;
             border-radius: 25px;
             display: flex;
             justify-content: center;
@@ -474,16 +509,21 @@
             position: relative;
             overflow: hidden;
             margin: 0 auto;
-            box-shadow: 0 6px 18px rgba(255, 215, 0, 0.25);
+            box-shadow: 0 6px 18px rgba(255, 215, 0, 0.25), inset 0 0 0 2px #fff9e6;
         }
 
         /* 공들이 회전하는 영역 */
         .balls-container {
             position: absolute;
-            width: 150px;
-            height: 150px;
+            width: 250px;
+            height: 350px;
             opacity: 0;
             transition: opacity 0.3s;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            overflow: visible;
+            pointer-events: none;
         }
 
         .balls-container.spinning {
@@ -569,29 +609,71 @@
             display: none;
         }
 
-        /* 공이 튀어나오는 애니메이션 */
+        /* 핀볼 공 스타일 */
         .result-ball {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             opacity: 0;
-            bottom: 50%;
+            top: 50%;
+            left: 50%;
+            margin-left: -14px;
+            margin-top: -14px;
         }
 
         .result-ball.pop {
-            animation: ballPop 0.8s ease-out forwards;
+            opacity: 1;
         }
 
-        @keyframes ballPop {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-200px) scale(0.5);
-            }
+        /* 각 공의 애니메이션 - 박스 안에서 튀기기 */
+        .result-ball:nth-child(1).pop { animation: bounce1 2s ease-in-out infinite; }
+        .result-ball:nth-child(2).pop { animation: bounce2 2.3s ease-in-out infinite; }
+        .result-ball:nth-child(3).pop { animation: bounce3 1.8s ease-in-out infinite; }
+        .result-ball:nth-child(4).pop { animation: bounce4 2.5s ease-in-out infinite; }
+        .result-ball:nth-child(5).pop { animation: bounce5 2.1s ease-in-out infinite; }
+        .result-ball:nth-child(6).pop { animation: bounce6 1.9s ease-in-out infinite; }
+
+        @keyframes bounce1 {
+            0%, 100% { transform: translate(-50px, -100px); }
+            25% { transform: translate(70px, 30px); }
+            50% { transform: translate(20px, 100px); }
+            75% { transform: translate(-100px, -30px); }
+        }
+
+        @keyframes bounce2 {
+            0%, 100% { transform: translate(30px, -120px); }
+            25% { transform: translate(-110px, 40px); }
+            50% { transform: translate(50px, 80px); }
+            75% { transform: translate(-40px, -50px); }
+        }
+
+        @keyframes bounce3 {
+            0%, 100% { transform: translate(-90px, 20px); }
+            25% { transform: translate(60px, -90px); }
+            50% { transform: translate(10px, 70px); }
+            75% { transform: translate(-110px, 10px); }
+        }
+
+        @keyframes bounce4 {
+            0%, 100% { transform: translate(50px, -30px); }
+            25% { transform: translate(-100px, -50px); }
+            50% { transform: translate(40px, 60px); }
+            75% { transform: translate(-50px, 20px); }
+        }
+
+        @keyframes bounce5 {
+            0%, 100% { transform: translate(-110px, -40px); }
+            25% { transform: translate(55px, 40px); }
+            50% { transform: translate(-90px, 90px); }
+            75% { transform: translate(30px, -60px); }
+        }
+
+        @keyframes bounce6 {
+            0%, 100% { transform: translate(-40px, 40px); }
+            25% { transform: translate(-110px, -30px); }
+            50% { transform: translate(30px, -50px); }
+            75% { transform: translate(50px, 70px); }
         }
 
         /* 버튼 영역 */
@@ -607,14 +689,14 @@
             align-items: center;
             box-shadow: none;
             padding: 0;
-            margin-top: 5px;
+            margin-top: 25px;
         }
 
         .gacha-button {
             width: 150px;
             height: 55px;
             background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            border: none;
+            border: 3px solid #d4a574;
             border-radius: 20px;
             cursor: pointer;
             font-size: 1.15em;
@@ -656,16 +738,64 @@
             }
         }
 
+        @keyframes bounce {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(30px);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
         .detail-section {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
+            padding: 15px 18px;
+            border-bottom: none;
+            background: #fff9e6;
+            border-radius: 15px;
+            border: 2px solid #ffeab4;
         }
 
         .detail-section:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
+            margin-bottom: 15px;
+            padding: 15px 18px;
             border-bottom: none;
+            background: #fff9e6;
+            border-radius: 15px;
+            border: 2px solid #ffeab4;
+        }
+
+        .share-btn {
+            width: 100%;
+            padding: 12px 20px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: 3px solid #d4a574;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #6b5b3c;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+        }
+
+        .share-btn:active {
+            transform: translateY(0);
         }
 
         .detail-label {
@@ -688,7 +818,7 @@
             background: white;
             padding: 12px 28px;
             border-radius: 15px;
-            display: inline-block;
+            display: none;
             border: none;
             box-shadow: 0 4px 12px rgba(107, 91, 60, 0.12);
             font-weight: 500;
@@ -735,8 +865,58 @@
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 4px solid #d4a574;
             position: relative;
-            animation: slideUp 0.3s ease;
+            animation: bounce 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #e8d4a8;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #d4a574;
+        }
+
+        /* 떨어지는 이모지 */
+        .falling-emoji {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            pointer-events: none;
+            animation: burst 2s ease-out forwards;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 500;
+            --tx: 0px;
+            --ty: 0px;
+            font-size: 500px;
+            line-height: 1;
+        }
+
+        @keyframes burst {
+            0% {
+                opacity: 1;
+                transform: translate(calc(-50% + 0px), calc(-50% + 0px)) scale(0.1);
+            }
+            40% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0);
+            }
         }
 
         .modal-close {
@@ -771,33 +951,19 @@
             font-size: 2.8em;
             font-weight: bold;
             color: #d4a574;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
             text-align: center;
             letter-spacing: 2px;
             text-shadow: none;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/confetti-js@0.0.18/dist/index.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="mascot">
             <div class="maneki-neko">
-                <div class="neko-head">
-                    <div class="neko-ear neko-ear-left"></div>
-                    <div class="neko-ear neko-ear-right"></div>
-                    <div class="neko-eye neko-eye-left"></div>
-                    <div class="neko-eye neko-eye-right"></div>
-                    <div class="neko-nose neko-nose-left"></div>
-                    <div class="neko-nose neko-nose-right"></div>
-                    <div class="neko-mouth"></div>
-                </div>
-                <div class="neko-body">
-                    <div class="neko-arm neko-arm-left"></div>
-                    <div class="neko-arm neko-arm-right"></div>
-                    <div class="neko-leg neko-leg-left"></div>
-                    <div class="neko-leg neko-leg-right"></div>
-                </div>
-                <div class="neko-coin"></div>
+                <img src="images/cat.png" alt="행운의 고양이">
             </div>
         </div>
         <h1>오늘의 운세</h1>
@@ -817,19 +983,12 @@
             <div class="gacha-body">
                 <div class="gacha-window">
                     <div class="balls-container" id="ballsContainer">
-                        <div class="ball red"></div>
-                        <div class="ball blue"></div>
-                        <div class="ball purple"></div>
-                        <div class="ball green"></div>
-                        <div class="ball orange"></div>
-                        <div class="ball pink"></div>
                     </div>
                     <div class="result-box" id="resultBox">
                         <div class="result-title" id="resultTitle">-</div>
                         <div class="result-lucky-item" id="resultLuckyItem"></div>
                         <div class="result-warning" id="resultWarning"></div>
                     </div>
-                    <div class="result-ball" id="resultBall"></div>
                 </div>
 
                 <div class="gacha-outlet"></div>
@@ -866,8 +1025,12 @@
                 <div class="detail-label">📅 오늘 하루 타이밍</div>
                 <div class="detail-content" id="detailTiming"></div>
             </div>
+
+            <button class="share-btn" id="shareBtn">📤 오늘의 운세 공유하기</button>
         </div>
     </div>
+
+    <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999;"></canvas>
 
     <script>
         const fortuneData = [
@@ -1003,11 +1166,140 @@
             document.getElementById('detailLuckyItem').textContent = fortune.luckyItem;
             document.getElementById('detailTiming').textContent = fortune.timing;
             modalOverlay.classList.add('show');
+
+            // 운세별 이모지 떨어지는 효과
+            setTimeout(() => {
+                let emojis = [];
+                let count = 80;
+
+                if (fortune.title === '대길' || fortune.title === '대대길') {
+                    emojis = ['🍀', '⭐', '💎', '🎉'];
+                    count = 75;
+                } else if (fortune.title === '소길' || fortune.title === '길') {
+                    emojis = ['⭐', '💖', '✨', '🌟'];
+                    count = 60;
+                } else if (fortune.title === '중길') {
+                    emojis = ['🔥', '💪', '⭐', '✨'];
+                    count = 60;
+                } else if (fortune.title === '평운') {
+                    emojis = ['😊', '🌤️', '☁️', '😌'];
+                    count = 45;
+                } else if (fortune.title === '소흉') {
+                    emojis = ['⚠️', '😰', '⚡', '💧'];
+                    count = 50;
+                } else if (fortune.title === '중흉') {
+                    emojis = ['❓', '⚡', '🌪️', '💫'];
+                    count = 50;
+                } else if (fortune.title === '흉') {
+                    emojis = ['😢', '⚠️', '💔', '😞'];
+                    count = 50;
+                } else if (fortune.title === '대흉') {
+                    emojis = ['💀', '🔥', '⚡', '🖤'];
+                    count = 40;
+                }
+
+                // 이모지 폭발 효과 생성 - 동시다발적으로 펑!
+                for (let emojiCount = 0; emojiCount < count; emojiCount++) {
+                    setTimeout(() => {
+                        const emoji = document.createElement('div');
+                        emoji.className = 'falling-emoji';
+                        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+                        // 완전히 랜덤한 각도로 흩어지기
+                        const randomAngle = Math.random() * Math.PI * 2; // 0-360도 완전 랜덤
+                        const finalAngle = randomAngle;
+
+                        const distance = 250 + Math.random() * 300; // 250-550px 랜덤하게 흩어짐
+                        const tx = Math.cos(finalAngle) * distance;
+                        const ty = Math.sin(finalAngle) * distance;
+
+                        emoji.style.setProperty('--tx', tx + 'px');
+                        emoji.style.setProperty('--ty', ty + 'px');
+
+                        modalOverlay.appendChild(emoji);
+                    }, emojiCount * 2); // 2ms 간격 - 거의 동시에 펑!
+                }
+
+                // 2.5초 후 이모지 제거
+                setTimeout(() => {
+                    document.querySelectorAll('.falling-emoji').forEach(el => el.remove());
+                }, 2500);
+            }, 300);
         }
 
         // 모달 닫기
         function closeModal() {
             modalOverlay.classList.remove('show');
+        }
+
+        // 공유하기 버튼 클릭 이벤트
+        const shareBtn = document.getElementById('shareBtn');
+        shareBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // 현재 보이는 운세 정보 수집
+            const title = document.getElementById('modalTitle').textContent;
+            const today = document.getElementById('detailToday').textContent;
+
+            // 공유할 텍스트
+            const shareText = `🎰 오늘의 운세: ${title}\n\n📌 ${today}\n\n운세 뽑기 앱에서 확인해보세요!`;
+
+            // 웹 공유 API 지원 여부 확인
+            if (navigator.share) {
+                navigator.share({
+                    title: '오늘의 운세',
+                    text: shareText,
+                    url: window.location.href
+                }).catch(err => console.log('공유 취소'));
+            } else {
+                // 웹 공유 API 미지원 시 클립보드 복사
+                const textArea = document.createElement('textarea');
+                textArea.value = shareText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('운세가 클립보드에 복사되었어요! 💫');
+            }
+        });
+
+        // AudioContext 한 번만 생성
+        let audioContext = null;
+        function getAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        // 뿅뿅 소리 함수 - 귀여운 게임기 소리
+        function playPop() {
+            try {
+                const ctx = getAudioContext();
+
+                // AudioContext가 suspended 상태면 resume
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+
+                // 부드러운 저음 비프음
+                const osc = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+
+                osc.type = 'sine'; // 부드러운 sine 파형
+                osc.frequency.value = 350; // 낮은 주파수
+
+                gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+
+                osc.connect(gainNode);
+                gainNode.connect(ctx.destination);
+
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {
+                console.log('Sound error:', e);
+            }
         }
 
         gachaBtn.addEventListener('click', () => {
@@ -1017,31 +1309,53 @@
             ballsContainer.classList.add('spinning');
             resultBox.classList.remove('show');
 
-            // 공 튀어나오는 효과
+            // 뿅 소리
+            playPop();
+
+            // 캡슐 공 색상
+            const capsuleColors = [
+                '#ff6b6b',
+                '#4d94ff',
+                '#ffd700',
+                '#52d97a',
+                '#b366ff',
+                '#ff9f5a'
+            ];
+
+            // 파칭코 공 생성 및 애니메이션
             setTimeout(() => {
-                resultBall.style.background = 'radial-gradient(135deg, #ff6b6b, #ff4444)';
-                resultBall.classList.add('pop');
-            }, 300);
+                capsuleColors.forEach((color, index) => {
+                    const capsule = document.createElement('div');
+                    capsule.className = 'result-ball';
+                    capsule.style.background = color;
+                    ballsContainer.appendChild(capsule);
 
-            // 애니메이션 종료
-            setTimeout(() => {
-                ballsContainer.classList.remove('spinning');
-                resultBall.classList.remove('pop');
-                resultBall.style.background = '';
+                    // 약간의 지연 후 애니메이션 시작
+                    setTimeout(() => {
+                        capsule.classList.add('pop');
+                    }, index * 50);
+                });
 
-                const randomFortune = getRandomFortune();
-                resultTitle.textContent = randomFortune.title;
-                document.getElementById('resultLuckyItem').textContent = randomFortune.luckyItem;
-                document.getElementById('resultWarning').textContent = randomFortune.warning;
-                resultBox.classList.add('show');
-
-                // 팝업 열기
+                // 애니메이션 종료
                 setTimeout(() => {
-                    openModal(randomFortune);
-                }, 300);
+                    ballsContainer.classList.remove('spinning');
+                    // 모든 캡슐 제거
+                    document.querySelectorAll('.result-ball').forEach(ball => ball.remove());
 
-                gachaBtn.disabled = false;
-            }, 1200);
+                    const randomFortune = getRandomFortune();
+                    resultTitle.textContent = randomFortune.title;
+                    document.getElementById('resultLuckyItem').textContent = randomFortune.luckyItem;
+                    document.getElementById('resultWarning').textContent = randomFortune.warning;
+                    resultBox.classList.add('show');
+
+                    // 팝업 열기
+                    setTimeout(() => {
+                        openModal(randomFortune);
+                    }, 300);
+
+                    gachaBtn.disabled = false;
+                }, 1300);
+            }, 300);
         });
 
         // 모달 닫기 이벤트
